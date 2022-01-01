@@ -10,11 +10,9 @@ pub fn longest_increasing_sequence(xs: &Vec<i32>) -> (Vec<i32>, Vec<usize>) {
     }
     for i in 1..m {
         for j in 0..i {
-            if xs[i] > xs[j] {
-                if f[i] < f[j] + 1 {
-                    f[i] = f[j] + 1;
-                    g[i] = j;
-                }
+            if xs[i] > xs[j] && f[i] < f[j] + 1 {
+                f[i] = f[j] + 1;
+                g[i] = j;
             }
         }
     }
@@ -108,14 +106,22 @@ pub fn knapsack01_complete(weights: &Vec<usize>, values: &Vec<usize>, w: usize) 
     f[w]
 }
 // 多重背包
-pub fn knapsack01_multiple(weights: &Vec<usize>, values: &Vec<usize>, numbers: &Vec<usize>, w: usize) -> usize {
+pub fn knapsack01_multiple(
+    weights: &Vec<usize>,
+    values: &Vec<usize>,
+    numbers: &Vec<usize>,
+    w: usize,
+) -> usize {
     let n = weights.len();
     let mut f = vec![vec![0; w + 1]; n + 1];
     for i in 1..=n {
         for j in 0..=w {
             let mut k = 0;
             while k <= numbers[i - 1] && k * weights[i - 1] <= j {
-                f[i][j] = max(f[i][j], f[i - 1][j - weights[i - 1] * k] + values[i - 1] * k);
+                f[i][j] = max(
+                    f[i][j],
+                    f[i - 1][j - weights[i - 1] * k] + values[i - 1] * k,
+                );
                 k += 1;
             }
         }
@@ -134,7 +140,6 @@ pub fn knapsack01_multiple(weights: &Vec<usize>, values: &Vec<usize>, numbers: &
 //     for所有的i属于组k
 //         for v=V..0
 //             f[v]=max{f[v],f[v-weights[i]]+values[i]}
-
 
 #[cfg(test)]
 mod tests {

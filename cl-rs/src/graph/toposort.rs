@@ -37,12 +37,22 @@ mod tests {
 
     #[test]
     fn heap_maximum_works() {
-        let xs = vec![vec![0, 1], vec![0, 4], vec![1, 2], vec![1, 4], vec![2, 7], vec![3, 4], vec![5, 2], vec![5, 6], vec![6, 7]];
+        let xs = vec![
+            vec![0, 1],
+            vec![0, 4],
+            vec![1, 2],
+            vec![1, 4],
+            vec![2, 7],
+            vec![3, 4],
+            vec![5, 2],
+            vec![5, 6],
+            vec![6, 7],
+        ];
         let vs = toposort(&xs, 8);
         for pair in xs {
             let (u, v) = (pair[0], pair[1]);
-            let u_idx = vs.iter().position(|&e| e==u).unwrap();
-            let v_idx = vs.iter().position(|&e| e==v).unwrap();
+            let u_idx = vs.iter().position(|&e| e == u).unwrap();
+            let v_idx = vs.iter().position(|&e| e == v).unwrap();
             assert!(u_idx < v_idx);
         }
         // println!("{:?}", vs);

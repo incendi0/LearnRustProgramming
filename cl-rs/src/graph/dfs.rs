@@ -12,7 +12,7 @@ pub fn depth_first_search(graph: &Vec<Vec<usize>>) -> Vec<DfsVertex> {
     let mut time = 0;
     for i in 0..n {
         if map.get(&i).unwrap().color == Color::White {
-            dfs(graph, i,  &mut map, &mut time);
+            dfs(graph, i, &mut map, &mut time);
         }
     }
     map.into_iter().map(|(_, v)| v).collect()
@@ -41,7 +41,16 @@ mod tests {
 
     #[test]
     fn heap_maximum_works() {
-        let graph = vec![vec![1], vec![0, 2], vec![1, 3], vec![2, 4, 5], vec![3, 5, 6, 7], vec![3, 4, 6], vec![4, 5, 7], vec![4, 6]];
+        let graph = vec![
+            vec![1],
+            vec![0, 2],
+            vec![1, 3],
+            vec![2, 4, 5],
+            vec![3, 5, 6, 7],
+            vec![3, 4, 6],
+            vec![4, 5, 7],
+            vec![4, 6],
+        ];
         let vs = depth_first_search(&graph);
         println!("{:?}", vs);
     }

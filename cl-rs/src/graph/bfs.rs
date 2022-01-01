@@ -1,6 +1,6 @@
 use std::collections::{HashMap, VecDeque};
 
-use super::{Color, BfsVertex};
+use super::{BfsVertex, Color};
 
 // adjacent list
 pub fn breadth_first_search(graph: &Vec<Vec<usize>>, start: usize, target: usize) -> bool {
@@ -44,7 +44,16 @@ mod tests {
 
     #[test]
     fn heap_maximum_works() {
-        let graph = vec![vec![1], vec![0, 2], vec![1, 3], vec![2, 4, 5], vec![3, 5, 6, 7], vec![3, 4, 6], vec![4, 5, 7], vec![4, 6]];
+        let graph = vec![
+            vec![1],
+            vec![0, 2],
+            vec![1, 3],
+            vec![2, 4, 5],
+            vec![3, 5, 6, 7],
+            vec![3, 4, 6],
+            vec![4, 5, 7],
+            vec![4, 6],
+        ];
         let start = 2;
         let target = 7;
         assert!(breadth_first_search(&graph, start, target));
