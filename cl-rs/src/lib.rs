@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 
-mod divide_conquer;
-mod dp;
-mod greedy;
-mod priority_queue;
-mod sort;
-mod tree;
-mod graph;
+pub mod divide_conquer;
+pub mod dp;
+pub mod greedy;
+pub mod priority_queue;
+pub mod sort;
+pub mod tree;
+pub mod graph;
