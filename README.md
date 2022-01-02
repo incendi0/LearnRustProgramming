@@ -2,6 +2,6 @@
 
 分成几个目标
 1. clrs
+2. rustlings
 2. leetcode daily program
-3. linkedlist
-4. finally，AC 6.824
+3. linkedlist https://rust-unofficial.github.io/too-many-lists/
