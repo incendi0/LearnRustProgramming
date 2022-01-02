@@ -12,8 +12,17 @@ mod tests {
 
     #[test]
     fn test_count_segments() {
-        assert_eq!(Solution::count_segments("Hello, my name is John".to_string()), 5);
-        assert_eq!(Solution::count_segments("Hello, my name is John   ".to_string()), 5);
-        assert_eq!(Solution::count_segments("Hello, my name is John \t  ".to_string()), 5);
+        assert_eq!(
+            Solution::count_segments("Hello, my name is John".to_string()),
+            5
+        );
+        assert_eq!(
+            Solution::count_segments("Hello, my name is John   ".to_string()),
+            5
+        );
+        assert_eq!(
+            Solution::count_segments("Hello, my name is John \t  ".to_string()),
+            5
+        );
     }
 }
