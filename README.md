@@ -4,4 +4,4 @@
 1. clrs
 2. rustlings
 2. leetcode daily program
-3. linkedlist https://rust-unofficial.github.io/too-many-lists/
+3. linkedlist https://rust-unofficial.github.io/too-many-lists/ :< really need to look back over and over
