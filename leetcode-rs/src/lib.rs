@@ -3,6 +3,7 @@
 mod contests;
 mod p0036_valid_sudoku;
 mod p0162_find_peak_element;
+mod p0206_reverse_linked_list;
 mod p0390_elimination_game;
 mod p0434_number_of_segments_in_a_string;
 mod p0447_number_of_boomerangs;
