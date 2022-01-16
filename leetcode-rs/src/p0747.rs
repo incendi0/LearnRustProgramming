@@ -30,8 +30,8 @@ mod tests {
 
     #[test]
     fn dominant_index_works() {
-        assert_eq!(Solution::dominant_index(vec![3,6,1,0]), 1);
-        assert_eq!(Solution::dominant_index(vec![1,2,3,4]), -1);
+        assert_eq!(Solution::dominant_index(vec![3, 6, 1, 0]), 1);
+        assert_eq!(Solution::dominant_index(vec![1, 2, 3, 4]), -1);
         assert_eq!(Solution::dominant_index(vec![1]), 0);
     }
 }

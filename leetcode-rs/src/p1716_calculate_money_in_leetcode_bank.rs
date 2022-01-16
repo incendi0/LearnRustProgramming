@@ -14,7 +14,7 @@ mod tests {
 
     use super::Solution;
 
-    #[test] 
+    #[test]
     fn total_money_works() {
         assert_eq!(Solution::total_money(4), 10);
         assert_eq!(Solution::total_money(10), 37);

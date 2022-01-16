@@ -1,6 +1,5 @@
 struct Solution;
 impl Solution {
-
     pub fn increasing_triplet(nums: Vec<i32>) -> bool {
         if nums.len() < 3 {
             return false;

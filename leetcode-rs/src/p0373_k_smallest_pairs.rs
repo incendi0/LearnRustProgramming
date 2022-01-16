@@ -36,8 +36,17 @@ mod tests {
 
     #[test]
     fn k_smallest_pairs_works() {
-        assert_eq!(Solution::k_smallest_pairs(vec![1,7,11], vec![2, 4, 6], 3), [[1,2],[1,4],[1,6]]);
-        assert_eq!(Solution::k_smallest_pairs(vec![1,1,2], vec![1, 2, 3], 2), [[1,1],[1,1]]);
-        assert_eq!(Solution::k_smallest_pairs(vec![1,2], vec![3], 3), [[1,3],[2,3]]);
+        assert_eq!(
+            Solution::k_smallest_pairs(vec![1, 7, 11], vec![2, 4, 6], 3),
+            [[1, 2], [1, 4], [1, 6]]
+        );
+        assert_eq!(
+            Solution::k_smallest_pairs(vec![1, 1, 2], vec![1, 2, 3], 2),
+            [[1, 1], [1, 1]]
+        );
+        assert_eq!(
+            Solution::k_smallest_pairs(vec![1, 2], vec![3], 3),
+            [[1, 3], [2, 3]]
+        );
     }
 }
