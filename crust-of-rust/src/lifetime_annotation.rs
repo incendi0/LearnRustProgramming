@@ -1,10 +1,10 @@
-pub struct StrSplit<'a> {
+pub struct StrSplit<'a, 'b> {
     remainder: Option<&'a str>,
-    delimiter: &'a str,
+    delimiter: &'b str,
 }
 
-impl<'a> StrSplit<'a> {
-    pub fn new(haystack: &'a str, delimiter: &'a str) -> Self {
+impl<'a, 'b> StrSplit<'a, 'b> {
+    pub fn new(haystack: &'a str, delimiter: &'b str) -> Self {
         StrSplit { 
             remainder: Some(haystack),
             delimiter,
@@ -12,7 +12,7 @@ impl<'a> StrSplit<'a> {
     }
 }
 
-impl<'a> Iterator for StrSplit<'a> {
+impl<'a, 'b> Iterator for StrSplit<'a, 'b> {
     type Item = &'a str;
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(ref mut remainder) = self.remainder {
@@ -29,6 +29,11 @@ impl<'a> Iterator for StrSplit<'a> {
     }
 }
 
+fn until_char(s: &str, c: char) -> &str {
+    StrSplit::new(s, &c.to_string()).next().unwrap()
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -43,5 +48,10 @@ mod tests {
         assert_eq!(ss.next(), Some("e"));
         assert_eq!(ss.next(), Some(""));
         assert_eq!(ss.next(), None);
+    }
+
+    #[test]
+    fn until_char_works() {
+        assert_eq!(until_char("hello world", 'o'), "hell");
     }
 }
