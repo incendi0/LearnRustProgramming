@@ -27,3 +27,4 @@ mod p1716_calculate_money_in_leetcode_bank;
 mod p1894_find_the_student_that_will_replace_the_chalk;
 mod p2022_convert_1d_array_into_2d_array;
 mod p2034_stock_price_fluctuation;
+mod p1414_find_min_fibonacci_numbers;
