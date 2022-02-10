@@ -3,5 +3,9 @@
 分成几个目标
 1. clrs
 2. rustlings
-2. leetcode daily program
-3. linkedlist https://rust-unofficial.github.io/too-many-lists/ :< really need to look back over and over
+3. leetcode daily program
+4. linkedlist https://rust-unofficial.github.io/too-many-lists/ :< really need to look back over and over
+5. port https://github.com/miloyip/json-tutorial to rust
+  5-1. index trait实现 TODO
+  5-2. 嵌套深度限制 TODO
+  5-3. pretty format TODO
