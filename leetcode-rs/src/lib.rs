@@ -3,6 +3,7 @@
 mod contests;
 mod p0036_valid_sudoku;
 mod p0089_gray_code;
+mod p0146_lru_cache;
 mod p0162_find_peak_element;
 mod p0206_reverse_linked_list;
 mod p0306_additive_number;
@@ -22,9 +23,9 @@ mod p1185_day_of_the_week;
 mod p1220_count_vowels_permutation;
 mod p1337_the_k_weakest_rows_in_a_matrix;
 mod p1345_jump_game_iv;
+mod p1414_find_min_fibonacci_numbers;
 mod p1629_slowest_key;
 mod p1716_calculate_money_in_leetcode_bank;
 mod p1894_find_the_student_that_will_replace_the_chalk;
 mod p2022_convert_1d_array_into_2d_array;
 mod p2034_stock_price_fluctuation;
-mod p1414_find_min_fibonacci_numbers;
