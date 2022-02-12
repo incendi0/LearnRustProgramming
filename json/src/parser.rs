@@ -1,10 +1,12 @@
 use crate::{error::JsonError, value::JsonValue, Result};
 use std::{collections::HashMap, str};
+const JSON_NESTED_DEPTH: usize = 256;
 
 struct Parser<'a> {
     content: &'a [u8],
     index: usize,
     length: usize,
+    nested_depth: usize,
 }
 
 impl<'a> Parser<'a> {
@@ -14,6 +16,7 @@ impl<'a> Parser<'a> {
             content,
             index: 0,
             length: content.len(),
+            nested_depth: JSON_NESTED_DEPTH,
         }
     }
 
@@ -60,9 +63,25 @@ impl<'a> Parser<'a> {
                     JsonValue::Bool(false)
                 }
             }),
-            Some(ch) if ch == b'"' => self.parse_string().map(|s| JsonValue::String(s)),
-            Some(ch) if ch == b'[' => self.parse_array().map(|arr| JsonValue::Array(arr)),
-            Some(ch) if ch == b'{' => self.parse_object().map(|m| JsonValue::Object(m)),
+            Some(ch) if ch == b'"' => self.parse_string().map(JsonValue::String),
+            Some(ch) if ch == b'[' => {
+                if self.nested_depth == 0 {
+                    return Err(JsonError::ExceedNestingDepth);
+                }
+                self.nested_depth -= 1;
+                let ret = self.parse_array().map(JsonValue::Array);
+                self.nested_depth += 1;
+                ret
+            }
+            Some(ch) if ch == b'{' => {
+                if self.nested_depth == 0 {
+                    return Err(JsonError::ExceedNestingDepth);
+                }
+                self.nested_depth -= 1;
+                let ret = self.parse_object().map(JsonValue::Object);
+                self.nested_depth += 1;
+                ret
+            }
             Some(_) => self.parse_number(),
             None => Err(JsonError::UnexpectedValue),
         }
@@ -156,7 +175,7 @@ impl<'a> Parser<'a> {
                             let u2 = self
                                 .parse_unicode()
                                 .map_err(|_| JsonError::InvalidUnicodeSurrogate)?;
-                            if u2 < 0xDC00 || u2 > 0xDFFF {
+                            if !(0xDC00..=0xDFFF).contains(&u2) {
                                 return Err(JsonError::InvalidUnicodeSurrogate);
                             }
                             u = (((u - 0xD800) << 10) | (u2 - 0xDC00)) + 0x10000;
@@ -756,6 +775,18 @@ mod tests {
     }
 
     #[test]
+    fn parse_exceed_nested_depth_works() {
+        let mut json = String::new();
+        for _ in 0..=JSON_NESTED_DEPTH {
+            json.push_str("{\"name\":");
+        }
+        assert_eq!(
+            Parser::new(&json).parse(),
+            Err(JsonError::ExceedNestingDepth)
+        );
+    }
+
+    #[test]
     fn parse_object_works() {
         if let Ok(JsonValue::Object(map)) = Parser::new(
             r#" { 
@@ -798,5 +829,139 @@ mod tests {
                 ])
             )
         }
+    }
+
+    #[test]
+    fn index_object_works() {
+        let json = Parser::new(
+            r#" { 
+                "n" : null , 
+                "f" : false , 
+                "t" : true , 
+                "i" : 123 , 
+                "s" : "abc", 
+                "a" : [ 1, 2, 3 ],
+                "o" : { "1" : 1, "2" : 2, "3" : 3 }
+                 } "#,
+        )
+        .parse()
+        .unwrap();
+
+        assert_eq!(json["john"], JsonValue::Null);
+        assert_eq!(json["doe"], JsonValue::Null);
+        assert_eq!(json["n"], JsonValue::Null);
+        assert_eq!(json["t"], JsonValue::Bool(true));
+        assert_eq!(json["f"], JsonValue::Bool(false));
+        assert_eq!(json["i"], JsonValue::Number(123f64));
+        assert_eq!(json["s"], JsonValue::String("abc".into()));
+        assert_eq!(
+            json["a"],
+            JsonValue::Array(vec![
+                JsonValue::Number(1f64),
+                JsonValue::Number(2f64),
+                JsonValue::Number(3f64)
+            ])
+        );
+        assert_eq!(
+            json["o"],
+            JsonValue::Object(HashMap::from([
+                ("1".into(), JsonValue::Number(1f64)),
+                ("2".into(), JsonValue::Number(2f64)),
+                ("3".into(), JsonValue::Number(3f64))
+            ]))
+        );
+    }
+
+    #[test]
+    fn index_mut_object_works() {
+        let mut json = Parser::new(
+            r#" { 
+                "n" : null , 
+                "f" : false , 
+                "t" : true , 
+                "i" : 123 , 
+                "s" : "abc", 
+                "a" : [ 1, 2, 3 ],
+                "o" : { "1" : 1, "2" : 2, "3" : 3 }
+                 } "#,
+        )
+        .parse()
+        .unwrap();
+
+        json["john"] = JsonValue::String("abc".to_string());
+        assert_eq!(json["john"], JsonValue::String("abc".to_string()));
+
+        json["n"] = JsonValue::String("abcd".to_string());
+        assert_eq!(json["n"], JsonValue::String("abcd".to_string()));
+    }
+
+    #[test]
+    fn index_array_works() {
+        let json = Parser::new(
+            r#" { 
+                "n" : null , 
+                "f" : false , 
+                "t" : true , 
+                "i" : 123 , 
+                "s" : "abc", 
+                "a" : [ 1, 2, 3 ],
+                "o" : { "1" : 1, "2" : 2, "3" : 3 }
+                 } "#,
+        )
+        .parse()
+        .unwrap();
+
+        assert_eq!(json["a"][0], JsonValue::Number(1f64));
+        assert_eq!(json["a"][1], JsonValue::Number(2f64));
+        assert_eq!(json["a"][2], JsonValue::Number(3f64));
+    }
+
+    #[test]
+    fn index_mut_array_works() {
+        let mut json = Parser::new(
+            r#" { 
+                "n" : null , 
+                "f" : false , 
+                "t" : true , 
+                "i" : 123 , 
+                "s" : "abc", 
+                "a" : [ 1, 2, 3 ],
+                "o" : { "1" : 1, "2" : 2, "3" : 3 }
+                 } "#,
+        )
+        .parse()
+        .unwrap();
+        println!("{:?}", json);
+        json["a"][0] = JsonValue::Number(0.43);
+        json["a"][1] = JsonValue::Null;
+        json["a"][2] = JsonValue::Array(vec![JsonValue::String("a".to_string())]);
+        json["a"][4] = JsonValue::Bool(false);
+        assert_eq!(json["a"][0], JsonValue::Number(0.43));
+        assert_eq!(json["a"][1], JsonValue::Null);
+        assert_eq!(
+            json["a"][2],
+            JsonValue::Array(vec![JsonValue::String("a".to_string())])
+        );
+        assert_eq!(json["a"][3], JsonValue::Null);
+        assert_eq!(json["a"][4], JsonValue::Bool(false));
+    }
+
+    #[test]
+    fn indent_object_works() {
+        let json = Parser::new(
+            r#" {
+                "n" : null ,
+                "f" : false ,
+                "t" : true ,
+                "i" : 123 ,
+                "s" : "abc",
+                "a" : [ 1, 2, 3, {"o" : { "1" : 1, "2" : 2, "3" : 3 }}],
+                "o" : { "1" : 1, "2" : 2, "3" : 3 , "o" : { "1" : 1, "2" : 2, "3" : 3 }}
+                 } "#,
+        )
+        .parse()
+        .unwrap();
+        // 格式参考了json.cn
+        println!("{:?}", json);
     }
 }
