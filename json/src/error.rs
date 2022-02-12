@@ -14,6 +14,7 @@ pub enum JsonError {
     MissEntryKey,
     MissEntryColon,
     MissCommaOrRightCurlyBracket,
+    ExceedNestingDepth,
 }
 
 impl fmt::Display for JsonError {
@@ -35,6 +36,7 @@ impl fmt::Display for JsonError {
             JsonError::MissCommaOrRightCurlyBracket => {
                 write!(f, "miss comma or right curly bracket")
             }
+            JsonError::ExceedNestingDepth => write!(f, "exceed nesting depth"),
         }
     }
 }
