@@ -55,7 +55,7 @@ impl Solution {
         let mut f = vec![i32::MAX as i64; (num_laps + 1) as usize];
         f[0] = -change_time as i64;
         for i in 1..=num_laps as usize {
-            for j in 1..=min(i, 20) {·
+            for j in 1..=min(i, 20) {
                 f[i] = min(f[i], f[i - j] + min_time[j] + change_time as i64);
             }
         }
