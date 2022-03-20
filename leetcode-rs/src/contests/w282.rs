@@ -1,5 +1,3 @@
-use core::num;
-
 struct Solution;
 
 impl Solution {
@@ -41,7 +39,7 @@ impl Solution {
     pub fn minimum_finish_time(tires: Vec<Vec<i32>>, change_time: i32, num_laps: i32) -> i32 {
         use std::cmp::min;
         let mut min_time = vec![i32::MAX as i64; 21];
-        for (i, tire) in tires.iter().enumerate() {
+        for (_, tire) in tires.iter().enumerate() {
             let mut elapsed: i64 = 0;
             for j in 1..min_time.len() {
                 elapsed = elapsed * (tire[1] as i64) + tire[0] as i64;
@@ -50,7 +48,7 @@ impl Solution {
                 }
                 min_time[j] = min(min_time[j], elapsed);
             }
-        }    
+        }
         println!("min_tim: {:?}", min_time);
         let mut f = vec![i32::MAX as i64; (num_laps + 1) as usize];
         f[0] = -change_time as i64;
@@ -69,26 +67,56 @@ mod tests {
 
     #[test]
     fn prefix_count_works() {
-        assert_eq!(Solution::prefix_count(vec!["pay","attention","practice","attend"].into_iter().map(|s| s.to_string()).collect(), "at".to_string()), 2);
-        assert_eq!(Solution::prefix_count(vec!["leetcode","win","loops","success"].into_iter().map(|s| s.to_string()).collect(), "code".to_string()), 0);
+        assert_eq!(
+            Solution::prefix_count(
+                vec!["pay", "attention", "practice", "attend"]
+                    .into_iter()
+                    .map(|s| s.to_string())
+                    .collect(),
+                "at".to_string()
+            ),
+            2
+        );
+        assert_eq!(
+            Solution::prefix_count(
+                vec!["leetcode", "win", "loops", "success"]
+                    .into_iter()
+                    .map(|s| s.to_string())
+                    .collect(),
+                "code".to_string()
+            ),
+            0
+        );
     }
 
     #[test]
     fn min_steps_works() {
-        assert_eq!(Solution::min_steps("leetcode".to_string(), "coats".to_string()), 7);
-        assert_eq!(Solution::min_steps("night".to_string(), "thing".to_string()), 0);
+        assert_eq!(
+            Solution::min_steps("leetcode".to_string(), "coats".to_string()),
+            7
+        );
+        assert_eq!(
+            Solution::min_steps("night".to_string(), "thing".to_string()),
+            0
+        );
     }
 
     #[test]
     fn minimum_time_works() {
         assert_eq!(Solution::minimum_time(vec![1, 2, 3], 5), 3);
         assert_eq!(Solution::minimum_time(vec![2], 1), 2);
-        assert_eq!(Solution::minimum_time(vec![9,7,10,9,10,9,10], 1), 7);
+        assert_eq!(Solution::minimum_time(vec![9, 7, 10, 9, 10, 9, 10], 1), 7);
     }
 
     #[test]
     fn minimum_finish_time_works() {
-        assert_eq!(Solution::minimum_finish_time(vec![vec![2,3],vec![3,4]], 5, 4), 21);
-        assert_eq!(Solution::minimum_finish_time(vec![vec![1,10],vec![2,2],vec![3,4]], 6, 5), 25);
+        assert_eq!(
+            Solution::minimum_finish_time(vec![vec![2, 3], vec![3, 4]], 5, 4),
+            21
+        );
+        assert_eq!(
+            Solution::minimum_finish_time(vec![vec![1, 10], vec![2, 2], vec![3, 4]], 6, 5),
+            25
+        );
     }
 }

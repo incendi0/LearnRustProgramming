@@ -66,18 +66,38 @@ impl Solution {
 mod tests {
     use super::Solution;
 
-    #[test] 
+    #[test]
     fn cells_in_range_works() {
-        assert_eq!(Solution::cells_in_range("K1:L2".into()), ["K1","K2","L1","L2"]);
-        assert_eq!(Solution::cells_in_range("A1:F1".into()), ["A1","B1","C1","D1","E1","F1"]);
+        assert_eq!(
+            Solution::cells_in_range("K1:L2".into()),
+            ["K1", "K2", "L1", "L2"]
+        );
+        assert_eq!(
+            Solution::cells_in_range("A1:F1".into()),
+            ["A1", "B1", "C1", "D1", "E1", "F1"]
+        );
     }
 
     #[test]
     fn minimal_k_sum_works() {
-        assert_eq!(Solution::minimal_k_sum(vec![1,4,25,10,25], 2), 5);
+        assert_eq!(Solution::minimal_k_sum(vec![1, 4, 25, 10, 25], 2), 5);
         assert_eq!(Solution::minimal_k_sum(vec![5, 6], 6), 25);
-        assert_eq!(Solution::minimal_k_sum(vec![53,41,90,33,84,26,50,32,63,47,66,43,29,88,71,28,83], 76), 3444);
-        assert_eq!(Solution::minimal_k_sum(vec![96,44,99,25,61,84,88,18,19,33,60,86,52,19,32,47,35,50,94,17,29,98,22,21,72,100,40,84], 35), 794);
+        assert_eq!(
+            Solution::minimal_k_sum(
+                vec![53, 41, 90, 33, 84, 26, 50, 32, 63, 47, 66, 43, 29, 88, 71, 28, 83],
+                76
+            ),
+            3444
+        );
+        assert_eq!(
+            Solution::minimal_k_sum(
+                vec![
+                    96, 44, 99, 25, 61, 84, 88, 18, 19, 33, 60, 86, 52, 19, 32, 47, 35, 50, 94, 17,
+                    29, 98, 22, 21, 72, 100, 40, 84
+                ],
+                35
+            ),
+            794
+        );
     }
 }
-
